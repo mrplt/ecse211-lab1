@@ -4,7 +4,7 @@ import static ca.mcgill.ecse211.lab1.Resources.*;
 
 public class BangBangController extends UltrasonicController {
 
-  public static final int WALLDIST = 20; //Standoff distance to wall/ bandcenter
+  public static final int WALLDIST = 30; //Standoff distance to wall/ bandcenter
   public static final int DEADBAND = 2;  //Error threshold or bandwidth
   public static final int DELTASPD = 100; //Bang-bang constant
   public static final int SLEEPINT = 50;  //Sleep interval 50ms = 20Hz
@@ -30,13 +30,13 @@ public class BangBangController extends UltrasonicController {
       RIGHT_MOTOR.forward();
     }
     else if(errorDist > 0) {
-      LEFT_MOTOR.setSpeed(MOTOR_HIGH + DELTASPD);
+      LEFT_MOTOR.setSpeed(MOTOR_HIGH);
       RIGHT_MOTOR.setSpeed(MOTOR_HIGH - DELTASPD);
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
     }
     else if(errorDist < 0) {
-      LEFT_MOTOR.setSpeed(MOTOR_HIGH - DELTASPD);
+      LEFT_MOTOR.setSpeed(MOTOR_HIGH);
       RIGHT_MOTOR.setSpeed(MOTOR_HIGH + DELTASPD);
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
