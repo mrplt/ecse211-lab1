@@ -4,11 +4,11 @@ import static ca.mcgill.ecse211.lab1.Resources.*;
 
 public class PController extends UltrasonicController {
 
-  private static final int MOTOR_SPEED = 200;
+  private static final int MOTOR_SPEED = 150;
   
   public static final int WALLDIST = 30; //Standoff distance to wall/ bandcenter
   //public static final int DEADBAND = 2;  //Error threshold or bandwidth
-  public static final int CORRVAR = 1; //Bang-bang constant
+ // public static final double CORRVAR = 1; //Bang-bang constant
   public static final int SLEEPINT = 50;  //Sleep interval 50ms = 20Hz
 
   public PController() {
@@ -24,7 +24,10 @@ public class PController extends UltrasonicController {
 
     // TODO: process a movement based on the us distance passed in (P style)
  int errorDist = WALLDIST - distance; //compute error
-   int deltaSpd = errorDist * CORRVAR;
+   int deltaSpd = errorDist*20 ;
+     if (deltaSpd > 150) {
+       deltaSpd = 150;
+     }
    /* if(Math.abs(errorDist) <= DEADBAND) {
       LEFT_MOTOR.setSpeed(MOTOR_SPEED);
       RIGHT_MOTOR.setSpeed(MOTOR_SPEED);
