@@ -8,7 +8,7 @@ public class PController extends UltrasonicController {
   
   public static final int WALLDIST = 30; //Standoff distance to wall/ bandcenter
   //public static final int DEADBAND = 2;  //Error threshold or bandwidth
- // public static final double CORRVAR = 1; //Bang-bang constant
+  public static final int CORRVAR = 1; //Bang-bang constant
   public static final int SLEEPINT = 50;  //Sleep interval 50ms = 20Hz
 
   public PController() {
@@ -24,7 +24,7 @@ public class PController extends UltrasonicController {
 
     // TODO: process a movement based on the us distance passed in (P style)
  int errorDist = WALLDIST - distance; //compute error
-   int deltaSpd = errorDist*20 ;
+   int deltaSpd = Math.abs(errorDist* CORRVAR);
      if (deltaSpd > 150) {
        deltaSpd = 150;
      }
@@ -35,8 +35,9 @@ public class PController extends UltrasonicController {
       RIGHT_MOTOR.forward();
     } */
      if(errorDist > 0) {
-      LEFT_MOTOR.setSpeed(MOTOR_SPEED + deltaSpd);
-      RIGHT_MOTOR.setSpeed(MOTOR_SPEED - deltaSpd);
+      LEFT_MOTOR.setSpeed(MOTOR_SPEED + 2*deltaSpd);
+     // RIGHT_MOTOR.setSpeed(MOTOR_SPEED - 2*deltaSpd);
+      RIGHT_MOTOR.setSpeed(3);
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
     }
