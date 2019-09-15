@@ -25,7 +25,7 @@ public class PController extends UltrasonicController {
     // TODO: process a movement based on the us distance passed in (P style)
     int errorDist = WALLDIST - distance; // errorDist is the difference between bandCenter and robot's distance from wall.
     
-    if(Math.abs(errorDist) <= DEADBAND) {   //Move robot forward if offset distance from wall distance path is within bandwidth threshold
+    if(Math.abs(errorDist) <= 3) {   //Move robot forward if offset distance from wall distance path is within bandwidth threshold
       LEFT_MOTOR.setSpeed(MOTOR_SPEED);      
       RIGHT_MOTOR.setSpeed(MOTOR_SPEED);
       LEFT_MOTOR.forward();
@@ -34,13 +34,15 @@ public class PController extends UltrasonicController {
     else if(errorDist > 0) { // robot is close to wall
       int diff = calcGain(errorDist);
       LEFT_MOTOR.setSpeed(MOTOR_SPEED + diff);
-      RIGHT_MOTOR.setSpeed(MOTOR_SPEED + diff);
+      RIGHT_MOTOR.setSpeed(diff);
       LEFT_MOTOR.forward();
+     // LEFT_MOTOR.forward();
+     // RIGHT_MOTOR.forward();
       RIGHT_MOTOR.backward();  //Roll wheels backwards to ensure robot does not hit wall
     }
     else if(errorDist < 0) { // robot is far away from wall
       int diff = calcGain(errorDist);
-      LEFT_MOTOR.setSpeed(MOTOR_SPEED - diff);       //decrease left motor speed.
+      LEFT_MOTOR.setSpeed(MOTOR_SPEED - (diff/2));       //decrease left motor speed.
       RIGHT_MOTOR.setSpeed(MOTOR_SPEED + diff);     //Increase right motor speed to allow robot to move closer to wall
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
@@ -51,8 +53,8 @@ public class PController extends UltrasonicController {
   public int calcGain(int errorDist) {
 //    int correction = (200*(errorDist))/8 + MOTOR_SPEED;
     int correction;
-    int bound = 50; // correction boundary to avoid over correction.
-    int CORRVAR = 10;
+    int bound = 80; // correction boundary to avoid over correction.
+    int CORRVAR = 5;
     
 //   correction = (int)(CORRVAR * Math.abs(errorDist) );
    correction = (CORRVAR * Math.abs(errorDist) );
