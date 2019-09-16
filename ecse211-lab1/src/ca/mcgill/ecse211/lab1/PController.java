@@ -25,7 +25,7 @@ public class PController extends UltrasonicController {
     // TODO: process a movement based on the us distance passed in (P style)
     int errorDist = WALLDIST - distance; // errorDist is the difference between bandCenter and robot's distance from wall.
     
-    if(Math.abs(errorDist) <= 3) {   //Move robot forward if offset distance from wall distance path is within bandwidth threshold
+    if(Math.abs(errorDist) <= DEADBAND) {   //Move robot forward if offset distance from wall distance path is within bandwidth threshold
       LEFT_MOTOR.setSpeed(MOTOR_SPEED);      
       RIGHT_MOTOR.setSpeed(MOTOR_SPEED);
       LEFT_MOTOR.forward();
@@ -36,8 +36,6 @@ public class PController extends UltrasonicController {
       LEFT_MOTOR.setSpeed(MOTOR_SPEED + diff);
       RIGHT_MOTOR.setSpeed(diff);
       LEFT_MOTOR.forward();
-     // LEFT_MOTOR.forward();
-     // RIGHT_MOTOR.forward();
       RIGHT_MOTOR.backward();  //Roll wheels backwards to ensure robot does not hit wall
     }
     else if(errorDist < 0) { // robot is far away from wall
@@ -47,22 +45,19 @@ public class PController extends UltrasonicController {
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
     }
-  
+ 
   }
   
   public int calcGain(int errorDist) {
-//    int correction = (200*(errorDist))/8 + MOTOR_SPEED;
     int correction;
     int bound = 80; // correction boundary to avoid over correction.
-    int CORRVAR = 5;
+    int propConst = 5; //proportional constant
     
-//   correction = (int)(CORRVAR * Math.abs(errorDist) );
-   correction = (CORRVAR * Math.abs(errorDist) );
+   correction = (propConst * Math.abs(errorDist) );
     
-   if (correction >= MOTOR_SPEED ) {
-     correction = bound;
-   }
-    
+   if (correction >= MOTOR_SPEED ) { 
+     correction = bound;           //this sets the correction speed to 80 if correction exceeds Motor Speed
+   }  
     return correction;
   }
 

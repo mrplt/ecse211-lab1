@@ -7,7 +7,7 @@ public class BangBangController extends UltrasonicController {
   
   public static final int WALLDIST = BAND_CENTER; //Stand off distance to wall/ band center
   public static final int DEADBAND = BAND_WIDTH;  //Error threshold or bandwidth
-
+  public static final int DELTASPD = 50;           //Bang-bang constant
 
   
   public BangBangController() {
@@ -30,15 +30,15 @@ public class BangBangController extends UltrasonicController {
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();
     }
-    else if(errorDist > 0) { // robot is close to wall
+    else if(errorDist > 0) {        // robot is close to wall
       LEFT_MOTOR.setSpeed(MOTOR_HIGH );
       RIGHT_MOTOR.setSpeed(MOTOR_HIGH );
       LEFT_MOTOR.forward();
-      RIGHT_MOTOR.backward();  //Roll wheels backwards to ensure robot does not hit wall
+      RIGHT_MOTOR.backward();        //Roll wheels backwards to ensure robot does not hit wall
     }
-    else if(errorDist < 0) { // robot is far away from wall
-      LEFT_MOTOR.setSpeed(MOTOR_LOW + 50);       //decrease left motor speed.
-      RIGHT_MOTOR.setSpeed(MOTOR_HIGH+ 50);     //Increase right motor speed to allow robot to move closer to wall
+    else if(errorDist < 0) {          // robot is far away from wall
+      LEFT_MOTOR.setSpeed(MOTOR_HIGH - DELTASPD);       //decrease left motor speed.
+      RIGHT_MOTOR.setSpeed(MOTOR_HIGH + DELTASPD);     //Increase right motor speed to allow robot to move closer to wall
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.forward();  
     }
