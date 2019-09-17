@@ -6,8 +6,6 @@ public class PController extends UltrasonicController {
 
   private static final int MOTOR_SPEED = 150;
   
-//  public static final int motorSpeedLeft = 175; 
-//  public static final int motorSpeedRight = 150; 
   public static final int WALLDIST = BAND_CENTER; 
   public static final int DEADBAND = BAND_WIDTH;
   
@@ -33,8 +31,8 @@ public class PController extends UltrasonicController {
     }
     else if(errorDist > 0) { // robot is close to wall
       int diff = calcGain(errorDist);
-      LEFT_MOTOR.setSpeed(MOTOR_SPEED + diff);
-      RIGHT_MOTOR.setSpeed(diff);
+      LEFT_MOTOR.setSpeed(MOTOR_SPEED + diff); //Increase left motor speed
+      RIGHT_MOTOR.setSpeed(diff);               //Decrease right motor speed
       LEFT_MOTOR.forward();
       RIGHT_MOTOR.backward();  //Roll wheels backwards to ensure robot does not hit wall
     }
